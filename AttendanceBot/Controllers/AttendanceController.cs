@@ -9,6 +9,8 @@ using System;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Diagnostics;
+using Microsoft.ProjectOxford.Vision;
+using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace AttendanceBot
 {
@@ -43,6 +45,9 @@ namespace AttendanceBot
 
                 try
                 {
+                    var face = new FaceServices();
+                    await face.EnsureGroupExistsAsync("test");
+                    await face.AddPerson("Person One", "test");
                     message = await this.GetImageIdentityAsync(activity, connector);
                 }
                 catch (ArgumentException e)
@@ -155,6 +160,10 @@ namespace AttendanceBot
 
         static async Task<string> MakeAnalysisRequest(Stream image)
         {
+
+            //var client = new VisionServiceClient(subscriptionKey);
+            //var result = await client.AnalyzeImageAsync(uriBase, VisualFeature.Faces);
+
 
             HttpClient client = new HttpClient();
 
