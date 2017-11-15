@@ -20,7 +20,10 @@ namespace AttendanceBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                if (activity.Attachments.Count == 0)
+                {
+                    await Conversation.SendAsync(activity, () => new Dialogs.luisDialog());
+                }
             }
             else
             {
