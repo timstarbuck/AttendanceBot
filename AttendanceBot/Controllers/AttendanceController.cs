@@ -41,14 +41,21 @@ namespace AttendanceBot
             {
                 //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
                 var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                string message;
+                string message = "";
 
                 try
                 {
                     var face = new FaceServices();
                     await face.EnsureGroupExistsAsync("test");
-                    await face.AddPerson("Person One", "test");
-                    message = await this.GetImageIdentityAsync(activity, connector);
+                    // await face.AddPerson("Person One", "test");
+                    var test = await face.ListPeople("test");
+                    foreach(var t in test)
+                    {
+                        message += t.ToString() + "<br />";
+                    }
+                    message += await face.AddPersonFace("5278ea69-4081-4d29-aad4-7c20c8e3ada2", "test", await GetImage(activity, connector));
+
+                    // message = await this.GetImageIdentityAsync(activity, connector);
                 }
                 catch (ArgumentException e)
                 {
@@ -104,6 +111,20 @@ namespace AttendanceBot
             }
             else if (message.Type == ActivityTypes.Ping)
             {
+            }
+
+            return null;
+        }
+
+        private async Task<byte[]> GetImage(Activity activity, ConnectorClient connector)
+        {
+            var imageAttachment = activity.Attachments?.FirstOrDefault(a => a.ContentType.Contains("image"));
+            if (imageAttachment != null)
+            {
+                using (var stream = await GetImageStream(connector, imageAttachment))
+                {
+                    return ReadToEnd(stream);
+                }
             }
 
             return null;

@@ -8,6 +8,7 @@ using System.Text;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace AttendanceBot
 {
@@ -98,35 +99,67 @@ namespace AttendanceBot
 
         }
 
-        public async Task<string> AddPersonFace(string personId, string personGroup)
+        public async Task<string> AddPersonFace(string personId, string personGroup, byte[] image)
         {
-            // TODO
-            //HttpClient client = GetHttpClient();
+            HttpClient client = GetHttpClient();
 
-            //var uri = uriBase + "persongroups/" + personGroup.ToLower() + "/persons";
+            var uri = uriBase + "persongroups/" + personGroup.ToLower() + "/persons/" + personId + "/persistedFaces";
 
-            //HttpResponseMessage response;
+            HttpResponseMessage response;
 
-            //// Request body
-            //byte[] byteData = Encoding.UTF8.GetBytes("{name:'" + personName + "',userData:''}");
+            // Request body
+            // byte[] byteData = Encoding.UTF8.GetBytes("{name:'" + personName + "',userData:''}");
 
-            //using (var content = new ByteArrayContent(byteData))
-            //{
-            //    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            //    response = await client.PostAsync(uri, content);
+            using (var content = new ByteArrayContent(image))
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response = await client.PostAsync(uri, content);
 
-            //    if (response.StatusCode == HttpStatusCode.OK)
-            //    {
-            //        Trace.TraceInformation("Person {0} added!", personName);
-            //        return await response.Content.ReadAsStringAsync();
-            //    }
-            //    else
-            //    {
-            //        Trace.TraceError(await response.Content.ReadAsStringAsync());
-            //        throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
-            //    }
-            //}
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    Trace.TraceInformation("PersonId {0} face added!", personId);
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    Trace.TraceError(await response.Content.ReadAsStringAsync());
+                    throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                }
+            }
 
+        }
+
+        public async Task<List<Person>> ListPeople(string personGroup)
+        {
+            HttpClient client = GetHttpClient();
+
+            var uri = uriBase + "persongroups/" + personGroup.ToLower() + "/persons";
+
+            HttpResponseMessage response;
+
+            response = await client.GetAsync(uri);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var data = await response.Content.ReadAsAsync<List<Person>>();
+                return data;
+
+            } else
+            {
+                throw new HttpException(await response.Content.ReadAsStringAsync());
+            }
+
+        }
+
+        public async Task<string> FindPersonFromImage(string personGroup)
+        {
+            // detect
+            // https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236
+
+            //identify
+            // https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395239
+
+            return"'Not Implemented";
         }
 
         private HttpClient GetHttpClient()
