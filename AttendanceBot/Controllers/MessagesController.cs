@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using System;
 
 namespace AttendanceBot
 {
@@ -37,12 +38,21 @@ namespace AttendanceBot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-                // Handle conversation state changes, like members being added and removed
-                // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
+                if (message.MembersAdded[0].Name != "Bot")
+                {
+                    ConnectorClient client = new ConnectorClient(new Uri(message.ServiceUrl));
+                    var reply = message.CreateReply();
+                    reply.Text = "Hello. How may I help you?";
+                    client.Conversations.ReplyToActivityAsync(reply);
+                }
+
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
+                //var message = await result;
+                //await context.PostAsync("Hello. How may I help you?");
+                //context.Wait(MessageReceivedAsync);
+
                 // Handle add/remove from contact lists
                 // Activity.From + Activity.Action represent what happened
             }

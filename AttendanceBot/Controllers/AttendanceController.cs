@@ -46,7 +46,7 @@ namespace AttendanceBot
                 try
                 {
                     var face = new FaceServices();
-                    await face.EnsureGroupExistsAsync("test");
+                    await face.EnsureGroupExistsAsync("room123");
                     // await face.AddPerson("Person One", "test");
                     var test = await face.ListPeople("test");
                     foreach(var t in test)
