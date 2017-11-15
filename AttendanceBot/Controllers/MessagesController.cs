@@ -44,7 +44,7 @@ namespace AttendanceBot
                 {
                     ConnectorClient client = new ConnectorClient(new Uri(message.ServiceUrl));
                     var reply = message.CreateReply();
-                    reply.Text = "Hello. How may I help you?";
+                    reply.Text = "Hello, welcome to Smart School. How may I help you?";
                     client.Conversations.ReplyToActivityAsync(reply);
                 }
 

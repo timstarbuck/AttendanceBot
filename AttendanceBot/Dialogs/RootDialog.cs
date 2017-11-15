@@ -50,7 +50,7 @@ namespace AttendanceBot.Dialogs
                 //    reply.Text = thisStudent.Name + " did not arrive at school today.";
                 //}
             }
-            if (activity.Text.Contains("leave") || activity.Text.Contains("home"))
+            if (activity.Text.Contains("leave") || activity.Text.Contains("left") || activity.Text.Contains("home"))
             {
                 await context.PostAsync($"You asked when your child left school?");
                 //if (thisStudent.Arrived != "")
@@ -81,7 +81,6 @@ namespace AttendanceBot.Dialogs
                 //    reply.Text = thisStudent.Name + " did not take the bus today.";
                 //}
             }
-
 
             context.Wait(MessageReceivedAsync);
         }
