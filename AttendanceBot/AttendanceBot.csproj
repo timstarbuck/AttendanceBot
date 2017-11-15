@@ -132,15 +132,18 @@
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\StudentSearchController.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\FaceDetectionRequest.cs" />
     <Compile Include="Models\LocationRecords.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\PersonGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FaceServices.cs" />
+    <Compile Include="Services\RecognitionServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
