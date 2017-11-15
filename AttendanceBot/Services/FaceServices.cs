@@ -151,7 +151,7 @@ namespace AttendanceBot
 
         }
 
-        public async Task<string> FindPersonFromImage(string personGroup)
+        public async Task<string> FindPersonFromImage(string personGroup, byte[] image)
         {
             // detect
             // https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236
@@ -161,6 +161,51 @@ namespace AttendanceBot
 
             return"'Not Implemented";
         }
+
+        public async Task<bool> TrainGroup(string personGroup)
+        {
+            HttpClient client = GetHttpClient();
+
+            var uri = uriBase + "persongroups/" + personGroup.ToLower() + "/train";
+
+            HttpResponseMessage response;
+
+            response = await client.PostAsync(uri, new StringContent(""));
+
+            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Accepted)
+            {
+                return true;
+            }
+            else
+            {
+                throw new HttpException(await response.Content.ReadAsStringAsync());
+            }
+
+        }
+
+        public async Task<List<PersonGroup>> ListGroups()
+        {
+            var groups = new List<PersonGroup>();
+            HttpClient client = GetHttpClient();
+
+            var uri = uriBase + "persongroups/";
+
+            HttpResponseMessage response;
+
+            response = await client.GetAsync(uri);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                groups = await response.Content.ReadAsAsync<List<PersonGroup>>();
+                return groups;
+            }
+            else
+            {
+                throw new HttpException(await response.Content.ReadAsStringAsync());
+            }
+
+        }
+
 
         private HttpClient GetHttpClient()
         {
