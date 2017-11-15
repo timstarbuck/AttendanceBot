@@ -38,14 +38,18 @@ namespace AttendanceBot
 
         public async Task<HttpResponseMessage> AddPersonFace(string personId, string groupName, string imagePath)
         {
-            //var imageBytes = Convert.FromBase64String(image);
-            //var imageBytes = await Request.Content.ReadAsByteArrayAsync();
-            //if (imageBytes.Length == 0)
-            //{
-            //    var stream = await Request.Content.ReadAsStreamAsync();
-            //    imageBytes = ReadToEnd(stream);
-            //}
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            byte[] imageBytes;
+            if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            {
+                using (var webClient = new WebClient())
+                {
+                    imageBytes = webClient.DownloadData(imagePath);
+                }
+            }
+            else
+            {
+                imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            }
             var face = new FaceServices();
             string faceId = await face.AddPersonFace(personId, groupName, imageBytes);
             return Request.CreateResponse(HttpStatusCode.OK, faceId);
@@ -67,7 +71,18 @@ namespace AttendanceBot
 
         public async Task<HttpResponseMessage> LogLocation(string groupName, string location, string imagePath)
         {
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            byte[] imageBytes;
+            if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            {
+                using (var webClient = new WebClient())
+                {
+                    imageBytes = webClient.DownloadData(imagePath);
+                }
+            } else
+            {
+                imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            }
+            
             var face = new FaceServices();
             string data = await face.FindPersonFromImage(groupName, imageBytes);
             var idResponse = JsonConvert.DeserializeObject <List<IdentificationResponse>>(data);
