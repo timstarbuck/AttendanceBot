@@ -22,7 +22,7 @@ namespace AttendanceBot
             {
                 if (activity.Attachments.Count == 0)
                 {
-                    await Conversation.SendAsync(activity, () => new Dialogs.luisDialog());
+                    await Conversation.SendAsync(activity, () => new Dialogs.LuisDialog());
                 }
             }
             else
