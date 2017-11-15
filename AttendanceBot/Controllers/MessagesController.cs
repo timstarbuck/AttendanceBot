@@ -5,12 +5,16 @@ using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using Newtonsoft.Json;
 
 namespace AttendanceBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        Person[] students;
+        Person thisStudent;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -38,13 +42,67 @@ namespace AttendanceBot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
+                ConnectorClient client = new ConnectorClient(new Uri(message.ServiceUrl));
+                var reply = message.CreateReply();
+
                 if (message.MembersAdded[0].Name != "Bot")
                 {
-                    ConnectorClient client = new ConnectorClient(new Uri(message.ServiceUrl));
-                    var reply = message.CreateReply();
                     reply.Text = "Hello. How may I help you?";
-                    client.Conversations.ReplyToActivityAsync(reply);
                 }
+
+                if (message.Text.Contains("in school") || message.Text.Contains("in class"))
+                {
+                    if (thisStudent.Arrived != "")
+                    {
+                        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
+                    }
+                    else
+                    {
+                        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                    }
+                }
+                if (message.Text.Contains("arrive") || message.Text.Contains("present"))
+                {
+                    if (thisStudent.Arrived != "")
+                    {
+                        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
+                    }
+                    else
+                    {
+                        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                    }
+                }
+                if (message.Text.Contains("leave") || message.Text.Contains("home"))
+                {
+                    if (thisStudent.Arrived != "")
+                    {
+                        if (thisStudent.Departed != "")
+                        {
+                            reply.Text = thisStudent.Name + " left school at " + thisStudent.Departed + ".";
+                        }
+                        else
+                        {
+                            reply.Text = thisStudent.Name + " has not left school today.";
+                        }
+                    }
+                    else
+                    {
+                        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                    }
+                }
+                if (message.Text.Contains("bus"))
+                {
+                    if (thisStudent.Bus != "")
+                    {
+                        reply.Text = thisStudent.Name + " took the bus today.";
+                    }
+                    else
+                    {
+                        reply.Text = thisStudent.Name + " did not take the bus today.";
+                    }
+                }
+
+                client.Conversations.ReplyToActivityAsync(reply);
 
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)

@@ -11,6 +11,12 @@ namespace AttendanceBot
 
         public string Name { get; set; }
 
+        public string Arrived { get; set; }
+
+        public string Departed { get; set; }
+
+        public string Bus { get; set; }
+
         public string UserData { get; set; }
 
         public List<string> PersistedFaceIds { get; set; }
