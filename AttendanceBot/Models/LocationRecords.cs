@@ -12,6 +12,8 @@ namespace AttendanceBot
         public string Location { get; set; }
 
         public DateTime Timestamp { get; set; }
+
+        public double Confidence { get; set; }
     }
 
     public static class LocationRecordLogs
