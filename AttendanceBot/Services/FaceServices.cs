@@ -183,6 +183,30 @@ namespace AttendanceBot
 
         }
 
+        public async Task<List<PersonGroup>> ListGroups()
+        {
+            var groups = new List<PersonGroup>();
+            HttpClient client = GetHttpClient();
+
+            var uri = uriBase + "persongroups/";
+
+            HttpResponseMessage response;
+
+            response = await client.GetAsync(uri);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                groups = await response.Content.ReadAsAsync<List<PersonGroup>>();
+                return groups;
+            }
+            else
+            {
+                throw new HttpException(await response.Content.ReadAsStringAsync());
+            }
+
+        }
+
+
         private HttpClient GetHttpClient()
         {
             var client = new HttpClient();

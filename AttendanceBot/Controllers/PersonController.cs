@@ -54,6 +54,12 @@ namespace AttendanceBot
             await face.TrainGroup(groupName);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+        public async Task<HttpResponseMessage> ListGroups()
+        {
+            var face = new FaceServices();
+            var groups = await face.ListGroups();
+            return Request.CreateResponse(HttpStatusCode.OK, groups);
+        }
 
         public async Task<HttpResponseMessage> LogLocation(string groupName, string location, string imagePath)
         {
