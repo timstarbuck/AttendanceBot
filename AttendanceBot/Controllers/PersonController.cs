@@ -48,6 +48,38 @@ namespace AttendanceBot
 
         }
 
+        public async Task<HttpResponseMessage> TrainGroup(string groupName)
+        {
+            var face = new FaceServices();
+            await face.TrainGroup(groupName);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        public async Task<HttpResponseMessage> LogLocation(string groupName, string location, string imagePath)
+        {
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            var face = new FaceServices();
+            string personId = await face.FindPersonFromImage(groupName, imageBytes);
+            if(personId != null && personId.Length > 0)
+            {
+                var log = new LocationRecord()
+                {
+                    PersonId = personId,
+                    Location = location,
+                    Timestamp = DateTime.UtcNow
+                };
+                // log something!
+                if (!LocationRecordLogs.Logs.ContainsKey(personId))
+                {
+                    LocationRecordLogs.Logs.Add(personId, new List<LocationRecord>());
+                }
+                LocationRecordLogs.Logs[personId].Add(log);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, personId);
+
+        }
+
+
         private static byte[] ReadToEnd(System.IO.Stream stream)
         {
             long originalPosition = 0;
