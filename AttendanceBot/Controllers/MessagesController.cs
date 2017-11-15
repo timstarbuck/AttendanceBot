@@ -5,6 +5,7 @@ using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using Newtonsoft.Json;
 
 namespace AttendanceBot
 {
@@ -38,6 +39,7 @@ namespace AttendanceBot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
+
                 if (message.MembersAdded[0].Name != "Bot")
                 {
                     ConnectorClient client = new ConnectorClient(new Uri(message.ServiceUrl));
