@@ -50,57 +50,57 @@ namespace AttendanceBot
                     reply.Text = "Hello. How may I help you?";
                 }
 
-                if (message.Text.Contains("in school") || message.Text.Contains("in class"))
-                {
-                    if (thisStudent.Arrived != "")
-                    {
-                        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
-                    }
-                    else
-                    {
-                        reply.Text = thisStudent.Name + " did not arrive at school today.";
-                    }
-                }
-                if (message.Text.Contains("arrive") || message.Text.Contains("present"))
-                {
-                    if (thisStudent.Arrived != "")
-                    {
-                        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
-                    }
-                    else
-                    {
-                        reply.Text = thisStudent.Name + " did not arrive at school today.";
-                    }
-                }
-                if (message.Text.Contains("leave") || message.Text.Contains("home"))
-                {
-                    if (thisStudent.Arrived != "")
-                    {
-                        if (thisStudent.Departed != "")
-                        {
-                            reply.Text = thisStudent.Name + " left school at " + thisStudent.Departed + ".";
-                        }
-                        else
-                        {
-                            reply.Text = thisStudent.Name + " has not left school today.";
-                        }
-                    }
-                    else
-                    {
-                        reply.Text = thisStudent.Name + " did not arrive at school today.";
-                    }
-                }
-                if (message.Text.Contains("bus"))
-                {
-                    if (thisStudent.Bus != "")
-                    {
-                        reply.Text = thisStudent.Name + " took the bus today.";
-                    }
-                    else
-                    {
-                        reply.Text = thisStudent.Name + " did not take the bus today.";
-                    }
-                }
+                //if (message.Text.Contains("in school") || message.Text.Contains("in class"))
+                //{
+                //    if (thisStudent.Arrived != "")
+                //    {
+                //        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
+                //    }
+                //    else
+                //    {
+                //        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                //    }
+                //}
+                //if (message.Text.Contains("arrive") || message.Text.Contains("present"))
+                //{
+                //    if (thisStudent.Arrived != "")
+                //    {
+                //        reply.Text = thisStudent.Name + " arrived at school at " + thisStudent.Arrived + ".";
+                //    }
+                //    else
+                //    {
+                //        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                //    }
+                //}
+                //if (message.Text.Contains("leave") || message.Text.Contains("home"))
+                //{
+                //    if (thisStudent.Arrived != "")
+                //    {
+                //        if (thisStudent.Departed != "")
+                //        {
+                //            reply.Text = thisStudent.Name + " left school at " + thisStudent.Departed + ".";
+                //        }
+                //        else
+                //        {
+                //            reply.Text = thisStudent.Name + " has not left school today.";
+                //        }
+                //    }
+                //    else
+                //    {
+                //        reply.Text = thisStudent.Name + " did not arrive at school today.";
+                //    }
+                //}
+                //if (message.Text.Contains("bus"))
+                //{
+                //    if (thisStudent.Bus != "")
+                //    {
+                //        reply.Text = thisStudent.Name + " took the bus today.";
+                //    }
+                //    else
+                //    {
+                //        reply.Text = thisStudent.Name + " did not take the bus today.";
+                //    }
+                //}
 
                 client.Conversations.ReplyToActivityAsync(reply);
 
