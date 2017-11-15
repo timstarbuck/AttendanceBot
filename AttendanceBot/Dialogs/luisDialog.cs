@@ -16,23 +16,31 @@ namespace AttendanceBot.Dialogs
     [Serializable]
     public class LuisDialog : LuisDialog<object>
     {
+        [LuisIntent("")]
+        public async Task EmptyFound(IDialogContext context, LuisResult luisResult)
+        {
+            await context.PostAsync("I'm sorry. I don't understand what you are asking.");
+        }
+
         [LuisIntent("None")]
         public async Task NoIntentFound(IDialogContext context, LuisResult luisResult)
         {
-            await context.PostAsync("No intent found. Maybe some more training is required?");
+            await context.PostAsync("I'm sorry. I don't understand what you are asking.");
         }
 
         [LuisIntent("AttendanceIn")]
         public async Task ArrivalIntent(IDialogContext context, LuisResult luisResult)
         {
+            await context.PostAsync("(Arrival question)");
             bool foundRecord = false;
-            var records = LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "group");
+            StringBuilder sb = new StringBuilder();
+            var logs = new LocationRecordLogs();
+            var records = await logs.GetByPerson(luisResult.Entities[0].Entity, "demo");
             foreach (var record in records)
             {
                 if (record.Location == "School")
                 {
                     foundRecord = true;
-                    StringBuilder sb = new StringBuilder();
                     sb.Append("Yes, ");
                     sb.Append(luisResult.Entities[0].Entity);
                     sb.Append(" arrived at school at ");
@@ -42,7 +50,6 @@ namespace AttendanceBot.Dialogs
                 }
                 if (foundRecord == false)
                 {
-                    StringBuilder sb = new StringBuilder();
                     sb.Append(luisResult.Entities[0].Entity);
                     sb.Append(" is not at school.");
                     await context.PostAsync(sb.ToString());
@@ -53,37 +60,73 @@ namespace AttendanceBot.Dialogs
         [LuisIntent("AttendanceOut")]
         public async Task DepartIntent(IDialogContext context, LuisResult luisResult)
         {
-            // Call API to get student's record
-            // if arrived:
-            //      if departed:
-            //
-            //      else
-            //
-            // else:
-
-
+            bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
-            sb.Append(luisResult.Entities[0].Entity);
-            sb.Append(" left school at ");
-            sb.Append("<get from data>");
-            sb.Append(".");
-            await context.PostAsync(sb.ToString());
+            var records = LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
+            foreach (var record in records)
+            {
+                if (record.Location == "Home")
+                {
+                    foundRecord = true;
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" left at school at ");
+                    sb.Append(record.Timestamp);
+                    sb.Append(".");
+                    await context.PostAsync(sb.ToString());
+                }
+                if (foundRecord == false)
+                {
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" was not at school.");
+                    await context.PostAsync(sb.ToString());
+                }
+            }
         }
 
         [LuisIntent("TravelType")]
         public async Task TravelTypeIntent(IDialogContext context, LuisResult luisResult)
         {
-            // Call API to get student's record
-            // if bus:
-
-            // else:
-
-
+            bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
-            sb.Append(luisResult.Entities[0].Entity);
-            sb.Append(" took the bus today.");
-            await context.PostAsync(sb.ToString());
+            var records = LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
+            foreach (var record in records)
+            {
+                if (record.Location == "Bus")
+                {
+                    foundRecord = true;
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" took the bus home.");
+                    await context.PostAsync(sb.ToString());
+                }
+                if (record.Location == "Car")
+                {
+                    foundRecord = true;
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" left school by car.");
+                    await context.PostAsync(sb.ToString());
+                }
+                if (record.Location == "Train")
+                {
+                    foundRecord = true;
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" left school by train.");
+                    await context.PostAsync(sb.ToString());
+                }
+                if (record.Location == "Walk")
+                {
+                    foundRecord = true;
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" walked home.");
+                    await context.PostAsync(sb.ToString());
+                }
+                if (foundRecord == false)
+                {
+                    sb.Append("I'm sorry, but I do not know how ");
+                    sb.Append(luisResult.Entities[0].Entity);
+                    sb.Append(" went home from school.");
+                    await context.PostAsync(sb.ToString());
+                }
+            }
         }
-
     }
 }

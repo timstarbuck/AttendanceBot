@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace AttendanceBot
@@ -25,11 +26,11 @@ namespace AttendanceBot
 
         public static Dictionary<string, List<LocationRecord>> Logs { get; set; }
 
-        public static List<LocationRecord> GetByPerson(string personName, string groupName)
+        public async static Task<List<LocationRecord>> GetByPerson(string personName, string groupName)
         {
             var records = new List<LocationRecord>();
             var face = new FaceServices();
-            var people = new FaceServices().ListPeople(groupName).Result;
+            var people = await face.ListPeople(groupName);
 
             var person = people.FirstOrDefault((p) => p.Name.Equals(personName, StringComparison.InvariantCultureIgnoreCase));
             if (person != null)
