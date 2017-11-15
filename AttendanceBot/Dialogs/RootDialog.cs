@@ -25,10 +25,6 @@ namespace AttendanceBot.Dialogs
             // return our reply to the user
             //await context.PostAsync($"You sent {activity.Text} which was {length} characters");
 
-            if (activity.Text.Contains("arrive"))
-            {
-                await context.PostAsync($"You asked about arriving?");
-            }
             if (activity.Text.Contains("in school") || activity.Text.Contains("in class"))
             {
                 await context.PostAsync($"You asked if your child was in school or in class?");
