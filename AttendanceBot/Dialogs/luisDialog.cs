@@ -31,7 +31,6 @@ namespace AttendanceBot.Dialogs
         [LuisIntent("AttendanceIn")]
         public async Task ArrivalIntent(IDialogContext context, LuisResult luisResult)
         {
-            await context.PostAsync("(Arrival question)");
             bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
             List<LocationRecord> records = await LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
@@ -47,12 +46,12 @@ namespace AttendanceBot.Dialogs
                     sb.Append(".");
                     await context.PostAsync(sb.ToString());
                 }
-                if (foundRecord == false)
-                {
-                    sb.Append(luisResult.Entities[0].Entity);
-                    sb.Append(" is not at school.");
-                    await context.PostAsync(sb.ToString());
-                }
+            }
+            if (foundRecord == false)
+            {
+                sb.Append(luisResult.Entities[0].Entity);
+                sb.Append(" is not at school.");
+                await context.PostAsync(sb.ToString());
             }
         }
 
@@ -73,12 +72,12 @@ namespace AttendanceBot.Dialogs
                     sb.Append(".");
                     await context.PostAsync(sb.ToString());
                 }
-                if (foundRecord == false)
-                {
-                    sb.Append(luisResult.Entities[0].Entity);
-                    sb.Append(" was not at school.");
-                    await context.PostAsync(sb.ToString());
-                }
+            }
+            if (foundRecord == false)
+            {
+                sb.Append(luisResult.Entities[0].Entity);
+                sb.Append(" was not at school.");
+                await context.PostAsync(sb.ToString());
             }
         }
 
@@ -118,13 +117,13 @@ namespace AttendanceBot.Dialogs
                     sb.Append(" walked home.");
                     await context.PostAsync(sb.ToString());
                 }
-                if (foundRecord == false)
-                {
-                    sb.Append("I'm sorry, but I do not know how ");
-                    sb.Append(luisResult.Entities[0].Entity);
-                    sb.Append(" went home from school.");
-                    await context.PostAsync(sb.ToString());
-                }
+            }
+            if (foundRecord == false)
+            {
+                sb.Append("I'm sorry, but I do not know how ");
+                sb.Append(luisResult.Entities[0].Entity);
+                sb.Append(" went home from school.");
+                await context.PostAsync(sb.ToString());
             }
         }
     }
