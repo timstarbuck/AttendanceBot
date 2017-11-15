@@ -34,8 +34,7 @@ namespace AttendanceBot.Dialogs
             await context.PostAsync("(Arrival question)");
             bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
-            var logs = new LocationRecordLogs();
-            var records = await logs.GetByPerson(luisResult.Entities[0].Entity, "demo");
+            List<LocationRecord> records = await LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
             foreach (var record in records)
             {
                 if (record.Location == "School")
@@ -62,7 +61,7 @@ namespace AttendanceBot.Dialogs
         {
             bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
-            var records = LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
+            var records = await LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
             foreach (var record in records)
             {
                 if (record.Location == "Home")
@@ -88,7 +87,7 @@ namespace AttendanceBot.Dialogs
         {
             bool foundRecord = false;
             StringBuilder sb = new StringBuilder();
-            var records = LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
+            var records = await LocationRecordLogs.GetByPerson(luisResult.Entities[0].Entity, "demo");
             foreach (var record in records)
             {
                 if (record.Location == "Bus")

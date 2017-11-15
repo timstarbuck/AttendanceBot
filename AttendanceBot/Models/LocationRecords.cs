@@ -26,7 +26,7 @@ namespace AttendanceBot
 
         public static Dictionary<string, List<LocationRecord>> Logs { get; set; }
 
-        public async static Task<List<LocationRecord>> GetByPerson(string personName, string groupName)
+        public static async Task<List<LocationRecord>> GetByPerson(string personName, string groupName)
         {
             var records = new List<LocationRecord>();
             var face = new FaceServices();
